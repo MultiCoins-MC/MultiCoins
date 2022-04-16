@@ -1,0 +1,43 @@
+package me.hsgamer.multicoins;
+
+import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.multicoins.config.MainConfig;
+import me.hsgamer.multicoins.config.MessageConfig;
+import me.hsgamer.multicoins.expansion.CoinsExpansion;
+import me.hsgamer.multicoins.listener.JoinListener;
+import me.hsgamer.multicoins.manager.CoinManager;
+
+public final class MultiCoins extends BasePlugin {
+    private final MainConfig mainConfig = new MainConfig(this);
+    private final MessageConfig messageConfig = new MessageConfig(this);
+    private final CoinManager coinManager = new CoinManager(this);
+
+    @Override
+    public void load() {
+        MessageUtils.setPrefix(MessageConfig.PREFIX::getValue);
+        mainConfig.setup();
+        messageConfig.setup();
+    }
+
+    @Override
+    public void enable() {
+        coinManager.setup();
+        registerListener(new JoinListener(this));
+
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            CoinsExpansion expansion = new CoinsExpansion(this);
+            expansion.register();
+            addDisableFunction(expansion::unregister);
+        }
+    }
+
+    @Override
+    public void disable() {
+        coinManager.disable();
+    }
+
+    public CoinManager getCoinManager() {
+        return coinManager;
+    }
+}

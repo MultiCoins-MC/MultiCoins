@@ -1,0 +1,7 @@
+name: MultiCoins
+version: '${project.version}'
+main: me.hsgamer.multicoins.MultiCoins
+api-version: 1.13
+authors: [ HSGamer ]
+softdepend:
+  - PlaceholderAPI
