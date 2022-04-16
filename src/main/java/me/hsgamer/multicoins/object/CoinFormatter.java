@@ -1,5 +1,7 @@
 package me.hsgamer.multicoins.object;
 
+import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -132,8 +134,8 @@ public class CoinFormatter {
                 .replace("{uuid}", uuid != null ? uuid.toString() : nullUuidSupplier.get())
                 .replace("{value}", value != null ? format(value) : nullValueSupplier.get())
                 .replace("{value_raw}", value != null ? String.valueOf(value) : nullValueSupplier.get())
-                .replace("{display_name}", displayName)
-                .replace("{currency}", value == null || value == 1 ? currencySingular : currencyPlural);
+                .replace("{display_name}", MessageUtils.colorize(displayName))
+                .replace("{currency}", MessageUtils.colorize(value == null || value == 1 ? currencySingular : currencyPlural));
         for (Map.Entry<String, BiFunction<UUID, Double, String>> entry : replacers.entrySet()) {
             replaced = replaced.replace("{" + entry.getKey() + "}", entry.getValue().apply(uuid, value));
         }
