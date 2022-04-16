@@ -40,6 +40,8 @@ public final class CoinEntry {
 
     public boolean setBalance(double balance, boolean save) {
         if (balance < 0 && !holder.isAllowNegative()) return false;
+        double oldBalance = this.balance.get();
+        if (oldBalance == balance) return true;
         this.balance.set(balance);
         if (save) {
             this.needSaving.set(true);
