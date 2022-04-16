@@ -4,7 +4,7 @@ import me.hsgamer.multicoins.MultiCoins;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 
 public class JoinListener implements Listener {
     private final MultiCoins instance;
@@ -13,8 +13,10 @@ public class JoinListener implements Listener {
         this.instance = instance;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onJoin(PlayerJoinEvent event) {
-        instance.getCoinManager().create(event.getPlayer().getUniqueId());
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onPreJoin(AsyncPlayerPreLoginEvent event) {
+        if (event.getLoginResult() == AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+            instance.getCoinManager().create(event.getUniqueId());
+        }
     }
 }
