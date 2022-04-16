@@ -34,23 +34,25 @@ public final class CoinEntry {
         return balance.get();
     }
 
-    public void setBalance(double balance) {
-        setBalance(balance, true);
+    public boolean setBalance(double balance) {
+        return setBalance(balance, true);
     }
 
-    public void setBalance(double balance, boolean save) {
+    public boolean setBalance(double balance, boolean save) {
+        if (balance < 0 && !holder.isAllowNegative()) return false;
         this.balance.set(balance);
         if (save) {
             this.needSaving.set(true);
         }
+        return true;
     }
 
-    public void addBalance(double amount) {
-        setBalance(getBalance() + amount);
+    public boolean giveBalance(double amount) {
+        return setBalance(getBalance() + amount);
     }
 
-    public void removeBalance(double amount) {
-        setBalance(getBalance() - amount);
+    public boolean takeBalance(double amount) {
+        return setBalance(getBalance() - amount);
     }
 
     public void save(boolean onUnregister) {

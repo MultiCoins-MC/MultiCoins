@@ -10,10 +10,7 @@ import me.hsgamer.multicoins.storage.YamlStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class CoinManager {
     private final Map<String, CoinHolder> holders = new HashMap<>();
@@ -50,6 +47,10 @@ public class CoinManager {
 
     public Optional<CoinHolder> getHolder(String name) {
         return Optional.ofNullable(holders.get(name));
+    }
+
+    public List<String> getHolders() {
+        return new ArrayList<>(holders.keySet());
     }
 
     public CoinFormatter getFormatter(String name) {

@@ -21,6 +21,7 @@ import java.util.Map;
 
 public class MainConfig extends PathableConfig {
     public static final SimpleConfigPath<List<String>> COINS = new SimpleConfigPath<>("coins", Collections.emptyList());
+    public static final SimpleConfigPath<List<String>> NEGATIVE_ALLOWED_COINS = new SimpleConfigPath<>("negative-allowed-coins", Collections.emptyList());
     public static final ConfigPath<Map<String, CoinFormatter>> FORMATTERS = new AdvancedConfigPath<Map<String, Map<String, Object>>, Map<String, CoinFormatter>>("formatters", Collections.emptyMap()) {
         @Override
         public @NotNull Map<String, Map<String, Object>> getFromConfig(@NotNull Config config) {

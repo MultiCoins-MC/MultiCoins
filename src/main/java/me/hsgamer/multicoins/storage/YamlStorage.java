@@ -23,7 +23,7 @@ public class YamlStorage implements CoinStorage {
 
     static {
         instance = JavaPlugin.getPlugin(MultiCoins.class);
-        baseFolder = new File(instance.getDataFolder(), "top");
+        baseFolder = new File(instance.getDataFolder(), "coins");
     }
 
     private AutoSaveConfig getConfig(String name) {

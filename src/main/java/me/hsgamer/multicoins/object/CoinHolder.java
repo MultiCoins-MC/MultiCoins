@@ -14,6 +14,7 @@ public final class CoinHolder {
     private final MultiCoins instance;
     private final String name;
     private final double startBalance;
+    private final boolean allowNegative;
     private final CoinStorage storage;
     private final Map<UUID, CoinEntry> entryMap = new ConcurrentHashMap<>();
     private final Queue<UUID> saveQueue = new ConcurrentLinkedQueue<>();
@@ -24,6 +25,7 @@ public final class CoinHolder {
         this.name = name;
         this.storage = storage;
         this.startBalance = MainConfig.START_BALANCES.getValue().getOrDefault(name, 0.0);
+        this.allowNegative = MainConfig.NEGATIVE_ALLOWED_COINS.getValue().contains(name);
     }
 
     private void onCreateEntry(CoinEntry entry) {
@@ -90,5 +92,9 @@ public final class CoinHolder {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isAllowNegative() {
+        return allowNegative;
     }
 }

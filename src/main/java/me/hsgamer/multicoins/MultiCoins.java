@@ -2,6 +2,7 @@ package me.hsgamer.multicoins;
 
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.multicoins.command.MainCommand;
 import me.hsgamer.multicoins.config.MainConfig;
 import me.hsgamer.multicoins.config.MessageConfig;
 import me.hsgamer.multicoins.expansion.CoinsExpansion;
@@ -22,8 +23,11 @@ public final class MultiCoins extends BasePlugin {
 
     @Override
     public void enable() {
+        Permissions.register();
+
         coinManager.setup();
         registerListener(new JoinListener(this));
+        registerCommand(new MainCommand(this));
 
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             CoinsExpansion expansion = new CoinsExpansion(this);
@@ -35,6 +39,7 @@ public final class MultiCoins extends BasePlugin {
     @Override
     public void disable() {
         coinManager.disable();
+        Permissions.unregister();
     }
 
     public CoinManager getCoinManager() {
