@@ -49,7 +49,17 @@ public class CoinsExpansion extends PlaceholderExpansion {
         CoinFormatter formatter = instance.getCoinManager().getFormatter(name);
         switch (type) {
             case "currency":
-                return formatter.getCurrency(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+                double amount;
+                if (split.length > 2) {
+                    try {
+                        amount = Double.parseDouble(split[2].trim());
+                    } catch (NumberFormatException e) {
+                        return null;
+                    }
+                } else {
+                    amount = coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance();
+                }
+                return formatter.getCurrency(amount);
             case "value_raw":
                 return String.valueOf(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
             case "value":
