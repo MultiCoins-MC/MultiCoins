@@ -40,10 +40,21 @@ public class CoinsExpansion extends PlaceholderExpansion {
 
     @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-        Optional<CoinHolder> optionalCoinHolder = instance.getCoinManager().getHolder(params);
+        String[] split = params.split(";");
+        String name = split[0].trim();
+        String type = split.length > 1 ? split[1].toLowerCase(Locale.ROOT).trim() : "";
+        Optional<CoinHolder> optionalCoinHolder = instance.getCoinManager().getHolder(name);
         if (!optionalCoinHolder.isPresent()) return null;
         CoinHolder coinHolder = optionalCoinHolder.get();
-        CoinFormatter formatter = instance.getCoinManager().getFormatter(params);
-        return formatter.format(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+        CoinFormatter formatter = instance.getCoinManager().getFormatter(name);
+        switch (type) {
+            case "currency":
+                return formatter.getCurrency(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+            case "value_raw":
+                return String.valueOf(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+            case "value":
+            default:
+                return formatter.format(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+        }
     }
 }

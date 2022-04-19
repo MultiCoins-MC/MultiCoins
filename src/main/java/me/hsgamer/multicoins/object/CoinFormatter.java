@@ -129,13 +129,17 @@ public class CoinFormatter {
         return getFormat().format(value);
     }
 
+    public String getCurrency(Double value) {
+        return MessageUtils.colorize(value == null || value == 1 ? currencySingular : currencyPlural);
+    }
+
     public String replace(String text, UUID uuid, Double value) {
         String replaced = text
                 .replace("{uuid}", uuid != null ? uuid.toString() : nullUuidSupplier.get())
                 .replace("{value}", value != null ? format(value) : nullValueSupplier.get())
                 .replace("{value_raw}", value != null ? String.valueOf(value) : nullValueSupplier.get())
                 .replace("{display_name}", MessageUtils.colorize(displayName))
-                .replace("{currency}", MessageUtils.colorize(value == null || value == 1 ? currencySingular : currencyPlural));
+                .replace("{currency}", getCurrency(value));
         for (Map.Entry<String, BiFunction<UUID, Double, String>> entry : replacers.entrySet()) {
             replaced = replaced.replace("{" + entry.getKey() + "}", entry.getValue().apply(uuid, value));
         }
