@@ -11,12 +11,12 @@ public class MessageConfig extends PathableConfig {
     public static final StringConfigPath PLAYER_ONLY = new StringConfigPath("player-only", "&cYou can only use this command in game!");
     public static final StringConfigPath INVALID_NUMBER = new StringConfigPath("invalid-number", "&cInvalid number!");
     public static final StringConfigPath HOLDER_NOT_FOUND = new StringConfigPath("holder-not-found", "&cHolder not found!");
-    public static final StringConfigPath GIVE_SUCCESS = new StringConfigPath("give-success", "&aSuccessfully given {value} {currency} to {name}!");
-    public static final StringConfigPath GIVE_FAILED = new StringConfigPath("give-failed", "&cFailed to give {value} {currency} to {name}!");
-    public static final StringConfigPath TAKE_SUCCESS = new StringConfigPath("take-success", "&aSuccessfully taken {value} {currency} from {name}!");
-    public static final StringConfigPath TAKE_FAILED = new StringConfigPath("take-failed", "&cFailed to take {value} {currency} from {name}!");
-    public static final StringConfigPath SET_SUCCESS = new StringConfigPath("set-success", "&aSuccessfully set {value} {currency} to {name}!");
-    public static final StringConfigPath SET_FAILED = new StringConfigPath("set-failed", "&cFailed to set {value} {currency} to {name}!");
+    public static final StringConfigPath GIVE_SUCCESS = new StringConfigPath("give-success", "&aSuccessfully given {value} {currency} &ato {name}!");
+    public static final StringConfigPath GIVE_FAILED = new StringConfigPath("give-failed", "&cFailed to give {value} {currency} &cto {name}!");
+    public static final StringConfigPath TAKE_SUCCESS = new StringConfigPath("take-success", "&aSuccessfully taken {value} {currency} &afrom {name}!");
+    public static final StringConfigPath TAKE_FAILED = new StringConfigPath("take-failed", "&cFailed to take {value} {currency} &cfrom {name}!");
+    public static final StringConfigPath SET_SUCCESS = new StringConfigPath("set-success", "&aSuccessfully set {value} {currency} &ato {name}!");
+    public static final StringConfigPath SET_FAILED = new StringConfigPath("set-failed", "&cFailed to set {value} {currency} &cto {name}!");
     public static final StringConfigPath BALANCE = new StringConfigPath("balance", "&aBalance: &f{value} {currency}");
 
     public MessageConfig(Plugin plugin) {
