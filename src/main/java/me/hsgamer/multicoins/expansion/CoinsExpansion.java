@@ -57,14 +57,14 @@ public class CoinsExpansion extends PlaceholderExpansion {
                         return null;
                     }
                 } else {
-                    amount = coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance();
+                    amount = coinHolder.getBalance(player.getUniqueId());
                 }
                 return formatter.getCurrency(amount);
             case "value_raw":
-                return String.valueOf(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+                return String.valueOf(coinHolder.getBalance(player.getUniqueId()));
             case "value":
             default:
-                return formatter.format(coinHolder.getOrCreateEntry(player.getUniqueId()).getBalance());
+                return formatter.format(coinHolder.getBalance(player.getUniqueId()));
         }
     }
 }

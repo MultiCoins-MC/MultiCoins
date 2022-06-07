@@ -6,9 +6,9 @@ import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.multicoins.Permissions;
 import me.hsgamer.multicoins.config.MessageConfig;
-import me.hsgamer.multicoins.object.CoinEntry;
 import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
+import me.hsgamer.topper.core.entry.DataEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public abstract class ChangeBalanceSubCommand extends SubCommand {
     protected final MultiCoins instance;
@@ -26,11 +27,11 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
         this.instance = instance;
     }
 
-    protected abstract boolean tryChange(CommandSender sender, CoinEntry entry, double amount);
+    protected abstract boolean tryChange(CommandSender sender, CoinHolder holder, UUID uuid, double amount);
 
-    protected abstract void sendSuccessMessage(CommandSender sender, CoinEntry entry, double amount, CoinFormatter formatter);
+    protected abstract void sendSuccessMessage(CommandSender sender, CoinHolder holder, UUID uuid, double amount, CoinFormatter formatter);
 
-    protected abstract void sendFailMessage(CommandSender sender, CoinEntry entry, double amount, CoinFormatter formatter);
+    protected abstract void sendFailMessage(CommandSender sender, CoinHolder holder, UUID uuid, double amount, CoinFormatter formatter);
 
     @SuppressWarnings("deprecation")
     @Override
@@ -43,7 +44,7 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
         CoinHolder coinHolder = optionalCoinHolder.get();
         //noinspection deprecation
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(args[1]);
-        CoinEntry entry = coinHolder.getOrCreateEntry(offlinePlayer.getUniqueId());
+        DataEntry<Double> entry = coinHolder.getOrCreateEntry(offlinePlayer.getUniqueId());
         Optional<Double> amountOptional = Validate.getNumber(args[2]).map(BigDecimal::doubleValue);
         if (!amountOptional.isPresent()) {
             MessageUtils.sendMessage(sender, MessageConfig.INVALID_NUMBER.getValue());
@@ -51,10 +52,10 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
         }
         double amount = amountOptional.get();
         CoinFormatter formatter = instance.getCoinManager().getFormatter(coinHolder.getName());
-        if (tryChange(sender, entry, amount)) {
-            sendSuccessMessage(sender, entry, amount, formatter);
+        if (tryChange(sender, coinHolder, entry.getUuid(), amount)) {
+            sendSuccessMessage(sender, coinHolder, entry.getUuid(), amount, formatter);
         } else {
-            sendFailMessage(sender, entry, amount, formatter);
+            sendFailMessage(sender, coinHolder, entry.getUuid(), amount, formatter);
         }
     }
 

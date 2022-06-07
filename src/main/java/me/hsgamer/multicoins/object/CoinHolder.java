@@ -2,99 +2,71 @@ package me.hsgamer.multicoins.object;
 
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.multicoins.config.MainConfig;
+import me.hsgamer.topper.core.agent.Agent;
+import me.hsgamer.topper.core.agent.storage.StorageAgent;
+import me.hsgamer.topper.core.entry.DataEntry;
+import me.hsgamer.topper.core.holder.DataWithAgentHolder;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Level;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
-public final class CoinHolder {
-    private final MultiCoins instance;
-    private final String name;
+public final class CoinHolder extends DataWithAgentHolder<Double> {
+    private final StorageAgent<Double, BukkitTask> storageAgent;
     private final double startBalance;
     private final boolean allowNegative;
-    private final CoinStorage storage;
-    private final Map<UUID, CoinEntry> entryMap = new ConcurrentHashMap<>();
-    private final Queue<UUID> saveQueue = new ConcurrentLinkedQueue<>();
-    private BukkitTask saveTask;
 
-    public CoinHolder(MultiCoins instance, String name, CoinStorage storage) {
-        this.instance = instance;
-        this.name = name;
-        this.storage = storage;
+    public CoinHolder(MultiCoins instance, String name) {
+        super(name);
         this.startBalance = MainConfig.START_BALANCES.getValue().getOrDefault(name, 0.0);
         this.allowNegative = MainConfig.NEGATIVE_ALLOWED_COINS.getValue().contains(name);
-    }
 
-    private void onCreateEntry(CoinEntry entry) {
-        saveQueue.add(entry.getUuid());
-    }
-
-    private void onRemoveEntry(CoinEntry entry) {
-        entryMap.remove(entry.getUuid());
-    }
-
-    public CompletableFuture<Void> save(CoinEntry entry, boolean onUnregister) {
-        return storage.save(entry, onUnregister);
-    }
-
-    public void register() {
-        storage.onRegister(this);
-        storage.load(this)
-                .whenComplete((entries, throwable) -> {
-                    if (throwable != null) {
-                        instance.getLogger().log(Level.SEVERE, "Failed to load top entries", throwable);
-                    }
-                    if (entries != null) {
-                        entries.forEach((uuid, value) -> getOrCreateEntry(uuid).setBalance(value, false));
-                    }
-                });
-
-        int saveDelay = MainConfig.SAVE_DELAY.getValue();
-        saveTask = instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, () -> {
-            List<UUID> list = new ArrayList<>();
-            for (int i = 0; i < MainConfig.SAVE_ENTRY_PER_TICK.getValue(); i++) {
-                UUID uuid = saveQueue.poll();
-                if (uuid == null) {
-                    break;
-                }
-                CoinEntry entry = getOrCreateEntry(uuid);
-                entry.save();
-                list.add(uuid);
-            }
-            if (!list.isEmpty()) {
-                saveQueue.addAll(list);
-            }
-        }, saveDelay, saveDelay);
-    }
-
-    public void unregister() {
-        if (saveTask != null) {
-            saveTask.cancel();
-        }
-        entryMap.values().forEach(entry -> {
-            entry.save(true);
-            onRemoveEntry(entry);
+        this.storageAgent = new StorageAgent<>(instance.getCoinManager().getStorageSupplier().apply(this));
+        storageAgent.setMaxEntryPerCall(MainConfig.SAVE_ENTRY_PER_TICK.getValue());
+        storageAgent.setRunTaskFunction(runnable -> {
+            int saveDelay = MainConfig.SAVE_DELAY.getValue();
+            return instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, runnable, saveDelay, saveDelay);
         });
-        storage.onUnregister(this);
-        entryMap.clear();
+        storageAgent.setCancelTaskConsumer(BukkitTask::cancel);
     }
 
-    public CoinEntry getOrCreateEntry(UUID uuid) {
-        return entryMap.computeIfAbsent(uuid, u -> {
-            CoinEntry entry = new CoinEntry(uuid, this, startBalance);
-            onCreateEntry(entry);
-            return entry;
-        });
-    }
-
-    public String getName() {
-        return name;
+    @Override
+    public Double getDefaultValue() {
+        return startBalance;
     }
 
     public boolean isAllowNegative() {
         return allowNegative;
+    }
+
+    @Override
+    public List<Agent> getAgentList() {
+        return Collections.singletonList(storageAgent);
+    }
+
+    public double getBalance(UUID uuid) {
+        return getOrCreateEntry(uuid).getValue();
+    }
+
+    public boolean setBalance(UUID uuid, double balance) {
+        return setBalance(uuid, balance, true);
+    }
+
+    public boolean setBalance(UUID uuid, double balance, boolean save) {
+        if (balance < 0 && !isAllowNegative()) return false;
+        DataEntry<Double> entry = getOrCreateEntry(uuid);
+        double oldBalance = entry.getValue();
+        if (oldBalance == balance) return true;
+        entry.setValue(balance, save);
+        return true;
+    }
+
+    public boolean giveBalance(UUID uuid, double amount) {
+        return setBalance(uuid, getBalance(uuid) + amount);
+    }
+
+    public boolean takeBalance(UUID uuid, double amount) {
+        return setBalance(uuid, getBalance(uuid) - amount);
     }
 }

@@ -5,9 +5,9 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.multicoins.Permissions;
 import me.hsgamer.multicoins.config.MessageConfig;
-import me.hsgamer.multicoins.object.CoinEntry;
 import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
+import me.hsgamer.topper.core.entry.DataEntry;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
@@ -45,9 +45,9 @@ public class GetSubCommand extends SubCommand {
         }
         OfflinePlayer offlinePlayer = (OfflinePlayer) target;
 
-        CoinEntry entry = coinHolder.getOrCreateEntry(offlinePlayer.getUniqueId());
+        DataEntry<Double> entry = coinHolder.getOrCreateEntry(offlinePlayer.getUniqueId());
         CoinFormatter formatter = instance.getCoinManager().getFormatter(coinHolder.getName());
-        MessageUtils.sendMessage(sender, formatter.replace(MessageConfig.BALANCE.getValue(), entry.getUuid(), entry.getBalance()));
+        MessageUtils.sendMessage(sender, formatter.replace(MessageConfig.BALANCE.getValue(), entry.getUuid(), entry.getValue()));
     }
 
     @Override
