@@ -8,9 +8,11 @@ import me.hsgamer.multicoins.config.MessageConfig;
 import me.hsgamer.multicoins.expansion.CoinsExpansion;
 import me.hsgamer.multicoins.listener.JoinListener;
 import me.hsgamer.multicoins.manager.CoinManager;
+import me.hsgamer.topper.spigot.config.DatabaseConfig;
 
 public final class MultiCoins extends BasePlugin {
     private final MainConfig mainConfig = new MainConfig(this);
+    private final DatabaseConfig databaseConfig = new DatabaseConfig(this);
     private final MessageConfig messageConfig = new MessageConfig(this);
     private final CoinManager coinManager = new CoinManager(this);
 
@@ -18,6 +20,7 @@ public final class MultiCoins extends BasePlugin {
     public void load() {
         MessageUtils.setPrefix(MessageConfig.PREFIX::getValue);
         mainConfig.setup();
+        databaseConfig.setup();
         messageConfig.setup();
     }
 
