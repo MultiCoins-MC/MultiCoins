@@ -24,8 +24,8 @@ public class CoinManager {
     }
 
     public void setup() {
-        storageSupplier = DataStorageBuilder.buildSupplier(MainConfig.STORAGE_TYPE.getValue(), instance);
         YamlStorageSupplier.setBaseFolderPath("coins");
+        storageSupplier = DataStorageBuilder.buildSupplier(MainConfig.STORAGE_TYPE.getValue(), instance);
         MainConfig.COINS.getValue().forEach(name -> {
             CoinHolder holder = new CoinHolder(instance, name);
             holder.register();
