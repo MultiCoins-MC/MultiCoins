@@ -6,7 +6,8 @@ import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import me.hsgamer.topper.core.holder.DataHolder;
 import me.hsgamer.topper.core.storage.DataStorage;
-import me.hsgamer.topper.spigot.builder.TopStorageBuilder;
+import me.hsgamer.topper.spigot.builder.DataStorageBuilder;
+import me.hsgamer.topper.spigot.storage.YamlStorageSupplier;
 
 import java.util.*;
 import java.util.function.Function;
@@ -23,7 +24,8 @@ public class CoinManager {
     }
 
     public void setup() {
-        storageSupplier = TopStorageBuilder.buildSupplier(MainConfig.STORAGE_TYPE.getValue(), instance);
+        storageSupplier = DataStorageBuilder.buildSupplier(MainConfig.STORAGE_TYPE.getValue(), instance);
+        YamlStorageSupplier.setBaseFolderPath("coins");
         MainConfig.COINS.getValue().forEach(name -> {
             CoinHolder holder = new CoinHolder(instance, name);
             holder.register();
