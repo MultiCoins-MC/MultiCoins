@@ -49,6 +49,10 @@ public class CoinManager {
         holders.values().forEach(holder -> holder.getOrCreateEntry(uuid));
     }
 
+    public void remove(UUID uuid) {
+        holders.values().forEach(holder -> holder.removeEntry(uuid));
+    }
+
     public Optional<CoinHolder> getHolder(String name) {
         return Optional.ofNullable(holders.get(name));
     }

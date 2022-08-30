@@ -6,7 +6,7 @@ import me.hsgamer.multicoins.command.MainCommand;
 import me.hsgamer.multicoins.config.MainConfig;
 import me.hsgamer.multicoins.config.MessageConfig;
 import me.hsgamer.multicoins.expansion.CoinsExpansion;
-import me.hsgamer.multicoins.listener.JoinListener;
+import me.hsgamer.multicoins.listener.PlayerListener;
 import me.hsgamer.multicoins.manager.CoinManager;
 import me.hsgamer.topper.spigot.config.DatabaseConfig;
 
@@ -29,7 +29,7 @@ public final class MultiCoins extends BasePlugin {
         Permissions.register();
 
         coinManager.setup();
-        registerListener(new JoinListener(this));
+        registerListener(new PlayerListener(this));
         registerCommand(new MainCommand(this));
 
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
