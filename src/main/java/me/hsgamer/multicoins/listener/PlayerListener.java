@@ -21,8 +21,8 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onQuit(PlayerQuitEvent event) {
-        instance.getCoinManager().remove(event.getPlayer().getUniqueId());
-    }
+//    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+//    public void onQuit(PlayerQuitEvent event) {
+//        instance.getCoinManager().remove(event.getPlayer().getUniqueId());
+//    }
 }
