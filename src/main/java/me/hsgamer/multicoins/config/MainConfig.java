@@ -6,6 +6,7 @@ import me.hsgamer.hscore.config.PathableConfig;
 import me.hsgamer.hscore.config.path.AdvancedConfigPath;
 import me.hsgamer.hscore.config.path.ConfigPath;
 import me.hsgamer.hscore.config.path.StickyConfigPath;
+import me.hsgamer.hscore.config.path.impl.BooleanConfigPath;
 import me.hsgamer.hscore.config.path.impl.IntegerConfigPath;
 import me.hsgamer.hscore.config.path.impl.SimpleConfigPath;
 import me.hsgamer.hscore.config.path.impl.StringConfigPath;
@@ -66,6 +67,7 @@ public class MainConfig extends PathableConfig {
     public static final IntegerConfigPath SAVE_DELAY = new IntegerConfigPath("save.delay", 20);
     public static final IntegerConfigPath SAVE_ENTRY_PER_TICK = new IntegerConfigPath("save.entry-per-tick", 1);
     public static final StringConfigPath STORAGE_TYPE = new StringConfigPath("storage.type", "yaml");
+    public static final BooleanConfigPath STORAGE_URGENT_LOAD = new BooleanConfigPath("storage.urgent-load", true);
 
     public MainConfig(Plugin plugin) {
         super(new BukkitConfig(plugin, "config.yml"));

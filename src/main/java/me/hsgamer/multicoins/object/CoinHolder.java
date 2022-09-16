@@ -25,6 +25,8 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
             return instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, runnable, saveDelay, saveDelay);
         });
         storageAgent.setCancelTaskConsumer(BukkitTask::cancel);
+        storageAgent.setLoadOnCreate(true);
+        storageAgent.setUrgentLoad(MainConfig.STORAGE_URGENT_LOAD.getValue());
         addAgent(storageAgent);
     }
 
