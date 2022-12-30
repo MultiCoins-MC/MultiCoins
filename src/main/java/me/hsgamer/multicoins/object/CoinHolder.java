@@ -12,13 +12,14 @@ import java.util.UUID;
 public final class CoinHolder extends DataWithAgentHolder<Double> {
     private final double startBalance;
     private final boolean allowNegative;
+    private final StorageAgent<Double, BukkitTask> storageAgent;
 
     public CoinHolder(MultiCoins instance, String name) {
         super(name);
         this.startBalance = MainConfig.START_BALANCES.getValue().getOrDefault(name, 0.0);
         this.allowNegative = MainConfig.NEGATIVE_ALLOWED_COINS.getValue().contains(name);
 
-        StorageAgent<Double, BukkitTask> storageAgent = new StorageAgent<>(instance.getCoinManager().getStorageSupplier().apply(this));
+        storageAgent = new StorageAgent<>(instance.getCoinManager().getStorageSupplier().apply(this));
         storageAgent.setMaxEntryPerCall(MainConfig.SAVE_ENTRY_PER_TICK.getValue());
         storageAgent.setRunTaskFunction(runnable -> {
             int saveDelay = MainConfig.SAVE_DELAY.getValue();
@@ -33,6 +34,10 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
     @Override
     public Double getDefaultValue() {
         return startBalance;
+    }
+
+    public void loadIfExist(UUID uuid) {
+        storageAgent.loadIfExist(uuid);
     }
 
     public boolean isAllowNegative() {

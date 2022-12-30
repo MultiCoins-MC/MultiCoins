@@ -46,7 +46,13 @@ public class CoinManager {
     }
 
     public void create(UUID uuid) {
-        holders.values().forEach(holder -> holder.getOrCreateEntry(uuid));
+        holders.values().forEach(holder -> {
+            if (holder.getEntry(uuid).isPresent()) {
+                holder.loadIfExist(uuid);
+            } else {
+                holder.getOrCreateEntry(uuid);
+            }
+        });
     }
 
     public void remove(UUID uuid) {
