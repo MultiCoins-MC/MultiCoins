@@ -10,7 +10,7 @@ import java.util.Map;
 public interface MainConfig {
     @ConfigPath("coins")
     default List<String> getCoins() {
-        return Collections.emptyList();
+        return Collections.singletonList("point");
     }
 
     @ConfigPath("negative-allowed-coins")
@@ -20,12 +20,18 @@ public interface MainConfig {
 
     @ConfigPath("formatters")
     default Map<String, CoinFormatter> getFormatters() {
-        return Collections.emptyMap();
+        CoinFormatter pointFormatter = new CoinFormatter();
+        pointFormatter.setCurrencyPlural("pts");
+        pointFormatter.setCurrencySingular("pt");
+        pointFormatter.setFractionDigits(0);
+        pointFormatter.setDisplayName("Point");
+        pointFormatter.setShowGroupSeparator(false);
+        return Collections.singletonMap("point", pointFormatter);
     }
 
     @ConfigPath("start-balances")
     default Map<String, Double> getStartBalances() {
-        return Collections.emptyMap();
+        return Collections.singletonMap("point", 10.0);
     }
 
     @ConfigPath("save.delay")
