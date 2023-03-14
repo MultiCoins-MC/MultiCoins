@@ -18,7 +18,6 @@
     </properties>
 
     <build>
-        <finalName>${project.name}-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -41,7 +40,7 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <minimizeJar>true</minimizeJar>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
                             <relocations>
                                 <relocation>
                                     <pattern>me.hsgamer.hscore</pattern>
