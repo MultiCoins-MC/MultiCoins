@@ -11,8 +11,6 @@ import java.util.function.Function;
 
 public class CoinManager {
     private final Map<String, CoinHolder> holders = new HashMap<>();
-    private final Map<String, CoinFormatter> formatters = new HashMap<>();
-    private final CoinFormatter defaultFormatter = new CoinFormatter();
     private final MultiCoins instance;
     private Function<DataHolder<Double>, DataStorage<Double>> storageSupplier;
 
@@ -22,13 +20,12 @@ public class CoinManager {
 
     public void setup() {
         storageSupplier = instance.getNumberStorageBuilder().buildSupplier(instance.getMainConfig().getStorageType());
-        instance.getMainConfig().getCoins().forEach(name -> {
-            CoinHolder holder = new CoinHolder(instance, name);
+        instance.getMainConfig().getFormatters().forEach((name, formatter) -> {
+            CoinHolder holder = new CoinHolder(instance, name, formatter);
             holder.register();
             holders.put(name, holder);
         });
         CoinFormatter.setNullDisplayValue(() -> "0");
-        formatters.putAll(instance.getMainConfig().getFormatters());
     }
 
     public Function<DataHolder<Double>, DataStorage<Double>> getStorageSupplier() {
@@ -38,7 +35,6 @@ public class CoinManager {
     public void disable() {
         holders.values().forEach(CoinHolder::unregister);
         holders.clear();
-        formatters.clear();
     }
 
     public void create(UUID uuid) {
@@ -61,9 +57,5 @@ public class CoinManager {
 
     public List<String> getHolders() {
         return new ArrayList<>(holders.keySet());
-    }
-
-    public CoinFormatter getFormatter(String name) {
-        return formatters.getOrDefault(name, defaultFormatter);
     }
 }

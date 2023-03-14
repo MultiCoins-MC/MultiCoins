@@ -5,7 +5,6 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.multicoins.Permissions;
-import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import me.hsgamer.topper.core.entry.DataEntry;
 import org.bukkit.Bukkit;
@@ -28,9 +27,9 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
 
     protected abstract boolean tryChange(CommandSender sender, CoinHolder holder, UUID uuid, double amount);
 
-    protected abstract void sendSuccessMessage(CommandSender sender, CoinHolder holder, UUID uuid, double amount, CoinFormatter formatter);
+    protected abstract void sendSuccessMessage(CommandSender sender, CoinHolder holder, UUID uuid, double amount);
 
-    protected abstract void sendFailMessage(CommandSender sender, CoinHolder holder, UUID uuid, double amount, CoinFormatter formatter);
+    protected abstract void sendFailMessage(CommandSender sender, CoinHolder holder, UUID uuid, double amount);
 
     @SuppressWarnings("deprecation")
     @Override
@@ -50,11 +49,10 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
             return;
         }
         double amount = amountOptional.get();
-        CoinFormatter formatter = instance.getCoinManager().getFormatter(coinHolder.getName());
         if (tryChange(sender, coinHolder, entry.getUuid(), amount)) {
-            sendSuccessMessage(sender, coinHolder, entry.getUuid(), amount, formatter);
+            sendSuccessMessage(sender, coinHolder, entry.getUuid(), amount);
         } else {
-            sendFailMessage(sender, coinHolder, entry.getUuid(), amount, formatter);
+            sendFailMessage(sender, coinHolder, entry.getUuid(), amount);
         }
     }
 

@@ -9,14 +9,12 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.UUID;
 
 public final class CoinHolder extends DataWithAgentHolder<Double> {
-    private final double startBalance;
-    private final boolean allowNegative;
     private final StorageAgent<Double, BukkitTask> storageAgent;
+    private final CoinFormatter coinFormatter;
 
-    public CoinHolder(MultiCoins instance, String name) {
+    public CoinHolder(MultiCoins instance, String name, CoinFormatter coinFormatter) {
         super(name);
-        this.startBalance = instance.getMainConfig().getStartBalances().getOrDefault(name, 0.0);
-        this.allowNegative = instance.getMainConfig().getNegativeAllowedCoins().contains(name);
+        this.coinFormatter = coinFormatter;
 
         storageAgent = new StorageAgent<>(instance.getLogger(), instance.getCoinManager().getStorageSupplier().apply(this));
         storageAgent.setMaxEntryPerCall(instance.getMainConfig().getSaveEntryPerTick());
@@ -30,17 +28,17 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
         addAgent(storageAgent);
     }
 
+    public CoinFormatter getCoinFormatter() {
+        return coinFormatter;
+    }
+
     @Override
     public Double getDefaultValue() {
-        return startBalance;
+        return getCoinFormatter().getStartBalance();
     }
 
     public void loadIfExist(UUID uuid) {
         storageAgent.loadIfExist(uuid);
-    }
-
-    public boolean isAllowNegative() {
-        return allowNegative;
     }
 
     public double getBalance(UUID uuid) {
@@ -52,7 +50,7 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
     }
 
     public boolean setBalance(UUID uuid, double balance, boolean save) {
-        if (balance < 0 && !isAllowNegative()) return false;
+        if (balance < 0 && !coinFormatter.isNegativeAllowed()) return false;
         DataEntry<Double> entry = getOrCreateEntry(uuid);
         double oldBalance = entry.getValue();
         if (oldBalance == balance) return true;

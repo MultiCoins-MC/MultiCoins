@@ -4,20 +4,9 @@ import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.multicoins.object.CoinFormatter;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 public interface MainConfig {
-    @ConfigPath("coins")
-    default List<String> getCoins() {
-        return Collections.singletonList("point");
-    }
-
-    @ConfigPath("negative-allowed-coins")
-    default List<String> getNegativeAllowedCoins() {
-        return Collections.emptyList();
-    }
-
     @ConfigPath("formatters")
     default Map<String, CoinFormatter> getFormatters() {
         CoinFormatter pointFormatter = new CoinFormatter();
@@ -26,12 +15,8 @@ public interface MainConfig {
         pointFormatter.setFractionDigits(0);
         pointFormatter.setDisplayName("Point");
         pointFormatter.setShowGroupSeparator(false);
+        pointFormatter.setStartBalance(10);
         return Collections.singletonMap("point", pointFormatter);
-    }
-
-    @ConfigPath("start-balances")
-    default Map<String, Double> getStartBalances() {
-        return Collections.singletonMap("point", 10.0);
     }
 
     @ConfigPath("save.delay")

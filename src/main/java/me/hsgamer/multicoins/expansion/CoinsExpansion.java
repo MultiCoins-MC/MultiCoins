@@ -2,7 +2,6 @@ package me.hsgamer.multicoins.expansion;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.hsgamer.multicoins.MultiCoins;
-import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
@@ -46,7 +45,6 @@ public class CoinsExpansion extends PlaceholderExpansion {
         Optional<CoinHolder> optionalCoinHolder = instance.getCoinManager().getHolder(name);
         if (!optionalCoinHolder.isPresent()) return null;
         CoinHolder coinHolder = optionalCoinHolder.get();
-        CoinFormatter formatter = instance.getCoinManager().getFormatter(name);
         switch (type) {
             case "currency":
                 double amount;
@@ -59,12 +57,12 @@ public class CoinsExpansion extends PlaceholderExpansion {
                 } else {
                     amount = coinHolder.getBalance(player.getUniqueId());
                 }
-                return formatter.getCurrency(amount);
+                return coinHolder.getCoinFormatter().getCurrency(amount);
             case "value_raw":
                 return String.valueOf(coinHolder.getBalance(player.getUniqueId()));
             case "value":
             default:
-                return formatter.format(coinHolder.getBalance(player.getUniqueId()));
+                return coinHolder.getCoinFormatter().format(coinHolder.getBalance(player.getUniqueId()));
         }
     }
 }
