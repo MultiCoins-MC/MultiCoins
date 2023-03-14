@@ -3,7 +3,7 @@ package me.hsgamer.multicoins.config;
 import me.hsgamer.hscore.config.annotation.ConfigPath;
 import me.hsgamer.multicoins.object.CoinFormatter;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 public interface MainConfig {
@@ -16,7 +16,19 @@ public interface MainConfig {
         pointFormatter.setDisplayName("Point");
         pointFormatter.setShowGroupSeparator(false);
         pointFormatter.setStartBalance(10);
-        return Collections.singletonMap("point", pointFormatter);
+
+        CoinFormatter coinFormatter = new CoinFormatter();
+        coinFormatter.setCurrencyPlural("coins");
+        coinFormatter.setCurrencySingular("coin");
+        coinFormatter.setFractionDigits(0);
+        coinFormatter.setDisplayName("Coin");
+        coinFormatter.setShowGroupSeparator(false);
+        coinFormatter.setStartBalance(0);
+
+        Map<String, CoinFormatter> map = new HashMap<>();
+        map.put("point", pointFormatter);
+        map.put("coin", coinFormatter);
+        return map;
     }
 
     @ConfigPath("save.delay")
