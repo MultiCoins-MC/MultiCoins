@@ -31,16 +31,6 @@ public interface MainConfig {
         return map;
     }
 
-    @ConfigPath("save.delay")
-    default int getSaveDelay() {
-        return 20;
-    }
-
-    @ConfigPath("save.entry-per-tick")
-    default int getSaveEntryPerTick() {
-        return 1;
-    }
-
     @ConfigPath("storage.type")
     default String getStorageType() {
         return "yaml";
@@ -49,5 +39,15 @@ public interface MainConfig {
     @ConfigPath("storage.urgent-load")
     default boolean isStorageUrgentLoad() {
         return true;
+    }
+
+    @ConfigPath("storage.save.delay")
+    default int getStorageSaveDelay() {
+        return 20;
+    }
+
+    @ConfigPath("storage.save.entry-per-tick")
+    default int getStorageSaveEntryPerTick() {
+        return 1;
     }
 }

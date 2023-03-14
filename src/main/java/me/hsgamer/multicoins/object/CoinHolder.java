@@ -17,9 +17,9 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
         this.coinFormatter = coinFormatter;
 
         storageAgent = new StorageAgent<>(instance.getLogger(), instance.getCoinManager().getStorageSupplier().apply(this));
-        storageAgent.setMaxEntryPerCall(instance.getMainConfig().getSaveEntryPerTick());
+        storageAgent.setMaxEntryPerCall(instance.getMainConfig().getStorageSaveEntryPerTick());
         storageAgent.setRunTaskFunction(runnable -> {
-            int saveDelay = instance.getMainConfig().getSaveDelay();
+            int saveDelay = instance.getMainConfig().getStorageSaveDelay();
             return instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, runnable, saveDelay, saveDelay);
         });
         storageAgent.setCancelTaskConsumer(BukkitTask::cancel);
