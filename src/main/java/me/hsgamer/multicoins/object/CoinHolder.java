@@ -1,7 +1,6 @@
 package me.hsgamer.multicoins.object;
 
 import me.hsgamer.multicoins.MultiCoins;
-import me.hsgamer.multicoins.config.MainConfig;
 import me.hsgamer.topper.core.agent.storage.StorageAgent;
 import me.hsgamer.topper.core.entry.DataEntry;
 import me.hsgamer.topper.core.holder.DataWithAgentHolder;
@@ -16,18 +15,18 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
 
     public CoinHolder(MultiCoins instance, String name) {
         super(name);
-        this.startBalance = MainConfig.START_BALANCES.getValue().getOrDefault(name, 0.0);
-        this.allowNegative = MainConfig.NEGATIVE_ALLOWED_COINS.getValue().contains(name);
+        this.startBalance = instance.getMainConfig().getStartBalances().getOrDefault(name, 0.0);
+        this.allowNegative = instance.getMainConfig().getNegativeAllowedCoins().contains(name);
 
-        storageAgent = new StorageAgent<>(instance.getCoinManager().getStorageSupplier().apply(this));
-        storageAgent.setMaxEntryPerCall(MainConfig.SAVE_ENTRY_PER_TICK.getValue());
+        storageAgent = new StorageAgent<>(instance.getLogger(), instance.getCoinManager().getStorageSupplier().apply(this));
+        storageAgent.setMaxEntryPerCall(instance.getMainConfig().getSaveEntryPerTick());
         storageAgent.setRunTaskFunction(runnable -> {
-            int saveDelay = MainConfig.SAVE_DELAY.getValue();
+            int saveDelay = instance.getMainConfig().getSaveDelay();
             return instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, runnable, saveDelay, saveDelay);
         });
         storageAgent.setCancelTaskConsumer(BukkitTask::cancel);
         storageAgent.setLoadOnCreate(true);
-        storageAgent.setUrgentLoad(MainConfig.STORAGE_URGENT_LOAD.getValue());
+        storageAgent.setUrgentLoad(instance.getMainConfig().isStorageUrgentLoad());
         addAgent(storageAgent);
     }
 

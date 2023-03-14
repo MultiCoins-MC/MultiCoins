@@ -5,7 +5,6 @@ import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.multicoins.Permissions;
-import me.hsgamer.multicoins.config.MessageConfig;
 import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import me.hsgamer.topper.core.entry.DataEntry;
@@ -23,7 +22,7 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
     protected final MultiCoins instance;
 
     protected ChangeBalanceSubCommand(MultiCoins instance, @NotNull String name, @NotNull String description) {
-        super(name, description, "/multicoins " + name + " <holder> <player> <amount>", Permissions.SET.getName(), true);
+        super(name, description, "/<label> " + name + " <holder> <player> <amount>", Permissions.SET.getName(), true);
         this.instance = instance;
     }
 
@@ -38,7 +37,7 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         Optional<CoinHolder> optionalCoinHolder = instance.getCoinManager().getHolder(args[0]);
         if (!optionalCoinHolder.isPresent()) {
-            MessageUtils.sendMessage(sender, MessageConfig.HOLDER_NOT_FOUND.getValue());
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getHolderNotFound());
             return;
         }
         CoinHolder coinHolder = optionalCoinHolder.get();
@@ -47,7 +46,7 @@ public abstract class ChangeBalanceSubCommand extends SubCommand {
         DataEntry<Double> entry = coinHolder.getOrCreateEntry(offlinePlayer.getUniqueId());
         Optional<Double> amountOptional = Validate.getNumber(args[2]).map(BigDecimal::doubleValue);
         if (!amountOptional.isPresent()) {
-            MessageUtils.sendMessage(sender, MessageConfig.INVALID_NUMBER.getValue());
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getInvalidNumber());
             return;
         }
         double amount = amountOptional.get();

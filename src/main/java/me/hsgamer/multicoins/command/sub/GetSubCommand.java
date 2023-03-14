@@ -4,7 +4,6 @@ import me.hsgamer.hscore.bukkit.command.sub.SubCommand;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.multicoins.Permissions;
-import me.hsgamer.multicoins.config.MessageConfig;
 import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import me.hsgamer.topper.core.entry.DataEntry;
@@ -20,7 +19,7 @@ public class GetSubCommand extends SubCommand {
     private final MultiCoins instance;
 
     public GetSubCommand(MultiCoins instance) {
-        super("get", "Get the amount of coins from the player", "/multicoins get <holder> [player]", Permissions.GET.getName(), true);
+        super("get", "Get the amount of coins from the player", "/<label> get <holder> [player]", Permissions.GET.getName(), true);
         this.instance = instance;
     }
 
@@ -29,7 +28,7 @@ public class GetSubCommand extends SubCommand {
     public void onSubCommand(@NotNull CommandSender sender, @NotNull String label, @NotNull String... args) {
         Optional<CoinHolder> optionalCoinHolder = instance.getCoinManager().getHolder(args[0]);
         if (!optionalCoinHolder.isPresent()) {
-            MessageUtils.sendMessage(sender, MessageConfig.HOLDER_NOT_FOUND.getValue());
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getHolderNotFound());
             return;
         }
         CoinHolder coinHolder = optionalCoinHolder.get();
@@ -40,14 +39,14 @@ public class GetSubCommand extends SubCommand {
             target = Bukkit.getOfflinePlayer(args[1]);
         }
         if (!(target instanceof OfflinePlayer)) {
-            MessageUtils.sendMessage(sender, MessageConfig.PLAYER_ONLY.getValue());
+            MessageUtils.sendMessage(sender, instance.getMessageConfig().getPlayerOnly());
             return;
         }
         OfflinePlayer offlinePlayer = (OfflinePlayer) target;
 
         DataEntry<Double> entry = coinHolder.getOrCreateEntry(offlinePlayer.getUniqueId());
         CoinFormatter formatter = instance.getCoinManager().getFormatter(coinHolder.getName());
-        MessageUtils.sendMessage(sender, formatter.replace(MessageConfig.BALANCE.getValue(), entry.getUuid(), entry.getValue()));
+        MessageUtils.sendMessage(sender, formatter.replace(instance.getMessageConfig().getBalance(), entry.getUuid(), entry.getValue()));
     }
 
     @Override

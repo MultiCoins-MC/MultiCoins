@@ -1,13 +1,10 @@
 package me.hsgamer.multicoins.manager;
 
 import me.hsgamer.multicoins.MultiCoins;
-import me.hsgamer.multicoins.config.MainConfig;
 import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import me.hsgamer.topper.core.holder.DataHolder;
 import me.hsgamer.topper.core.storage.DataStorage;
-import me.hsgamer.topper.spigot.builder.DataStorageBuilder;
-import me.hsgamer.topper.spigot.storage.YamlStorageSupplier;
 
 import java.util.*;
 import java.util.function.Function;
@@ -24,15 +21,14 @@ public class CoinManager {
     }
 
     public void setup() {
-        YamlStorageSupplier.setBaseFolderPath("coins");
-        storageSupplier = DataStorageBuilder.buildSupplier(MainConfig.STORAGE_TYPE.getValue(), instance);
-        MainConfig.COINS.getValue().forEach(name -> {
+        storageSupplier = instance.getNumberStorageBuilder().buildSupplier(instance.getMainConfig().getStorageType());
+        instance.getMainConfig().getCoins().forEach(name -> {
             CoinHolder holder = new CoinHolder(instance, name);
             holder.register();
             holders.put(name, holder);
         });
         CoinFormatter.setNullDisplayValue(() -> "0");
-        formatters.putAll(MainConfig.FORMATTERS.getValue());
+        formatters.putAll(instance.getMainConfig().getFormatters());
     }
 
     public Function<DataHolder<Double>, DataStorage<Double>> getStorageSupplier() {

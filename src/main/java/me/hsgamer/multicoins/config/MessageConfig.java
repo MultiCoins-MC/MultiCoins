@@ -1,25 +1,60 @@
 package me.hsgamer.multicoins.config;
 
-import me.hsgamer.hscore.bukkit.config.BukkitConfig;
-import me.hsgamer.hscore.config.PathableConfig;
-import me.hsgamer.hscore.config.path.impl.StringConfigPath;
-import org.bukkit.plugin.Plugin;
+import me.hsgamer.hscore.config.annotation.ConfigPath;
 
-public class MessageConfig extends PathableConfig {
-    public static final StringConfigPath PREFIX = new StringConfigPath("prefix", "&7[&dMulticoins&7] &r");
-    public static final StringConfigPath ARG_NOT_FOUND = new StringConfigPath("arg-not-found", "&cArgument not found!");
-    public static final StringConfigPath PLAYER_ONLY = new StringConfigPath("player-only", "&cYou can only use this command in game!");
-    public static final StringConfigPath INVALID_NUMBER = new StringConfigPath("invalid-number", "&cInvalid number!");
-    public static final StringConfigPath HOLDER_NOT_FOUND = new StringConfigPath("holder-not-found", "&cHolder not found!");
-    public static final StringConfigPath GIVE_SUCCESS = new StringConfigPath("give-success", "&aSuccessfully given {value} {currency} &ato {name}!");
-    public static final StringConfigPath GIVE_FAILED = new StringConfigPath("give-failed", "&cFailed to give {value} {currency} &cto {name}!");
-    public static final StringConfigPath TAKE_SUCCESS = new StringConfigPath("take-success", "&aSuccessfully taken {value} {currency} &afrom {name}!");
-    public static final StringConfigPath TAKE_FAILED = new StringConfigPath("take-failed", "&cFailed to take {value} {currency} &cfrom {name}!");
-    public static final StringConfigPath SET_SUCCESS = new StringConfigPath("set-success", "&aSuccessfully set {value} {currency} &ato {name}!");
-    public static final StringConfigPath SET_FAILED = new StringConfigPath("set-failed", "&cFailed to set {value} {currency} &cto {name}!");
-    public static final StringConfigPath BALANCE = new StringConfigPath("balance", "&aBalance: &f{value} {currency}");
+public interface MessageConfig {
+    @ConfigPath("prefix")
+    default String getPrefix() {
+        return "&7[&dMulticoins&7] &r";
+    }
 
-    public MessageConfig(Plugin plugin) {
-        super(new BukkitConfig(plugin, "messages.yml"));
+    @ConfigPath("player-only")
+    default String getPlayerOnly() {
+        return "&cYou can only use this command in game!";
+    }
+
+    @ConfigPath("invalid-number")
+    default String getInvalidNumber() {
+        return "&cInvalid number!";
+    }
+
+    @ConfigPath("holder-not-found")
+    default String getHolderNotFound() {
+        return "&cHolder not found!";
+    }
+
+    @ConfigPath("give-success")
+    default String getGiveSuccess() {
+        return "&aSuccessfully given {value} {currency} &ato {name}!";
+    }
+
+    @ConfigPath("give-failed")
+    default String getGiveFailed() {
+        return "&cFailed to give {value} {currency} &cto {name}!";
+    }
+
+    @ConfigPath("take-success")
+    default String getTakeSuccess() {
+        return "&aSuccessfully taken {value} {currency} &afrom {name}!";
+    }
+
+    @ConfigPath("take-failed")
+    default String getTakeFailed() {
+        return "&cFailed to take {value} {currency} &cfrom {name}!";
+    }
+
+    @ConfigPath("set-success")
+    default String getSetSuccess() {
+        return "&aSuccessfully set {value} {currency} &ato {name}!";
+    }
+
+    @ConfigPath("set-failed")
+    default String getSetFailed() {
+        return "&cFailed to set {value} {currency} &cto {name}!";
+    }
+
+    @ConfigPath("balance")
+    default String getBalance() {
+        return "&aBalance: &f{value} {currency}";
     }
 }

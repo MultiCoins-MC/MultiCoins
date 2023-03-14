@@ -1,33 +1,83 @@
 package me.hsgamer.multicoins;
 
+import com.google.common.reflect.TypeToken;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
+import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
+import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.hsgamer.multicoins.command.MainCommand;
 import me.hsgamer.multicoins.config.MainConfig;
 import me.hsgamer.multicoins.config.MessageConfig;
 import me.hsgamer.multicoins.expansion.CoinsExpansion;
 import me.hsgamer.multicoins.listener.PlayerListener;
 import me.hsgamer.multicoins.manager.CoinManager;
-import me.hsgamer.topper.spigot.config.DatabaseConfig;
+import me.hsgamer.multicoins.object.CoinFormatter;
+import me.hsgamer.topper.spigot.builder.NumberStorageBuilder;
+import me.hsgamer.topper.spigot.config.DefaultConverterRegistry;
+import me.hsgamer.topper.spigot.config.converter.StringMapConverter;
+
+import java.io.File;
+import java.util.*;
 
 public final class MultiCoins extends BasePlugin {
-    private final MainConfig mainConfig = new MainConfig(this);
-    private final DatabaseConfig databaseConfig = new DatabaseConfig(this);
-    private final MessageConfig messageConfig = new MessageConfig(this);
+    static {
+        DefaultConverterRegistry.register();
+
+        //noinspection UnstableApiUsage
+        DefaultConverterManager.registerConverter(new TypeToken<Map<String, CoinFormatter>>() {
+        }.getType(), new StringMapConverter<CoinFormatter>() {
+            @Override
+            protected CoinFormatter toValue(Object o) {
+                if (o instanceof Map) {
+                    Map<String, Object> map = new HashMap<>();
+                    for (Map.Entry<?, ?> entry : ((Map<?, ?>) o).entrySet()) {
+                        map.put(Objects.toString(entry.getKey()), entry.getValue());
+                    }
+                    return new CoinFormatter(map);
+                }
+                return null;
+            }
+
+            @Override
+            protected Object toRawValue(Object o) {
+                if (o instanceof CoinFormatter) {
+                    return ((CoinFormatter) o).toMap();
+                }
+                return null;
+            }
+        });
+        //noinspection UnstableApiUsage
+        DefaultConverterManager.registerConverter(new TypeToken<Map<String, Double>>() {
+        }.getType(), new StringMapConverter<Double>() {
+            @Override
+            protected Double toValue(Object o) {
+                try {
+                    return Double.parseDouble(Objects.toString(o));
+                } catch (NumberFormatException e) {
+                    return null;
+                }
+            }
+
+            @Override
+            protected Object toRawValue(Object o) {
+                return o;
+            }
+        });
+    }
+
+    private final NumberStorageBuilder numberStorageBuilder = new NumberStorageBuilder(this, new File(getDataFolder(), "coins"));
+    private final MainConfig mainConfig = ConfigGenerator.newInstance(MainConfig.class, new BukkitConfig(this, "config.yml"));
+    private final MessageConfig messageConfig = ConfigGenerator.newInstance(MessageConfig.class, new BukkitConfig(this, "messages.yml"));
     private final CoinManager coinManager = new CoinManager(this);
 
     @Override
     public void load() {
-        MessageUtils.setPrefix(MessageConfig.PREFIX::getValue);
-        mainConfig.setup();
-        databaseConfig.setup();
-        messageConfig.setup();
+        MessageUtils.setPrefix(messageConfig::getPrefix);
     }
 
     @Override
     public void enable() {
-        Permissions.register();
-
         coinManager.setup();
         registerListener(new PlayerListener(this));
         registerCommand(new MainCommand(this));
@@ -42,7 +92,23 @@ public final class MultiCoins extends BasePlugin {
     @Override
     public void disable() {
         coinManager.disable();
-        Permissions.unregister();
+    }
+
+    @Override
+    protected List<Class<?>> getPermissionClasses() {
+        return Collections.singletonList(Permissions.class);
+    }
+
+    public NumberStorageBuilder getNumberStorageBuilder() {
+        return numberStorageBuilder;
+    }
+
+    public MainConfig getMainConfig() {
+        return mainConfig;
+    }
+
+    public MessageConfig getMessageConfig() {
+        return messageConfig;
     }
 
     public CoinManager getCoinManager() {

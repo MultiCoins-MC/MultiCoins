@@ -1,13 +1,13 @@
 package me.hsgamer.multicoins.object;
 
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
-import me.hsgamer.topper.spigot.formatter.DataFormatter;
+import me.hsgamer.topper.spigot.formatter.NumberFormatter;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CoinFormatter extends DataFormatter {
+public class CoinFormatter extends NumberFormatter {
     private String currencySingular = "$";
     private String currencyPlural = "$";
 
@@ -37,12 +37,12 @@ public class CoinFormatter extends DataFormatter {
         this.currencyPlural = currencyPlural;
     }
 
-    public String getCurrency(Double value) {
-        return MessageUtils.colorize(value == null || value == 1 ? currencySingular : currencyPlural);
+    public String getCurrency(Number value) {
+        return MessageUtils.colorize(value == null || value.intValue() == 1 ? currencySingular : currencyPlural);
     }
 
     @Override
-    public String replace(String text, UUID uuid, Double value) {
+    public String replace(String text, UUID uuid, Number value) {
         return super.replace(text, uuid, value).replace("{currency}", getCurrency(value));
     }
 
