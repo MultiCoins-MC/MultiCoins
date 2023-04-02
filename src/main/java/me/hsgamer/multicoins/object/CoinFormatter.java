@@ -1,6 +1,6 @@
 package me.hsgamer.multicoins.object;
 
-import me.hsgamer.hscore.bukkit.utils.MessageUtils;
+import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.common.Validate;
 import me.hsgamer.topper.spigot.formatter.NumberFormatter;
 
@@ -44,7 +44,7 @@ public class CoinFormatter extends NumberFormatter {
     }
 
     public String getCurrency(Number value) {
-        return MessageUtils.colorize(value == null || value.intValue() == 1 ? currencySingular : currencyPlural);
+        return ColorUtils.colorize(value == null || value.intValue() == 1 ? currencySingular : currencyPlural);
     }
 
     public boolean isNegativeAllowed() {

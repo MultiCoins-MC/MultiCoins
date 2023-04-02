@@ -1,15 +1,15 @@
 package me.hsgamer.multicoins.object;
 
+import me.hsgamer.hscore.bukkit.scheduler.Scheduler;
 import me.hsgamer.multicoins.MultiCoins;
 import me.hsgamer.topper.core.agent.storage.StorageAgent;
 import me.hsgamer.topper.core.entry.DataEntry;
 import me.hsgamer.topper.core.holder.DataWithAgentHolder;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.UUID;
 
 public final class CoinHolder extends DataWithAgentHolder<Double> {
-    private final StorageAgent<Double, BukkitTask> storageAgent;
+    private final StorageAgent<Double> storageAgent;
     private final CoinFormatter coinFormatter;
 
     public CoinHolder(MultiCoins instance, String name, CoinFormatter coinFormatter) {
@@ -20,9 +20,8 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
         storageAgent.setMaxEntryPerCall(instance.getMainConfig().getStorageSaveEntryPerTick());
         storageAgent.setRunTaskFunction(runnable -> {
             int saveDelay = instance.getMainConfig().getStorageSaveDelay();
-            return instance.getServer().getScheduler().runTaskTimerAsynchronously(instance, runnable, saveDelay, saveDelay);
+            return Scheduler.CURRENT.runTaskTimer(instance, runnable, saveDelay, saveDelay, true)::cancel;
         });
-        storageAgent.setCancelTaskConsumer(BukkitTask::cancel);
         storageAgent.setLoadOnCreate(true);
         storageAgent.setUrgentLoad(instance.getMainConfig().isStorageUrgentLoad());
         addAgent(storageAgent);
