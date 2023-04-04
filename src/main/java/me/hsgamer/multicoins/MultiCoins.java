@@ -4,7 +4,6 @@ import com.google.common.reflect.TypeToken;
 import me.hsgamer.hscore.bukkit.baseplugin.BasePlugin;
 import me.hsgamer.hscore.bukkit.config.BukkitConfig;
 import me.hsgamer.hscore.bukkit.utils.MessageUtils;
-import me.hsgamer.hscore.config.annotation.converter.manager.DefaultConverterManager;
 import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.hsgamer.multicoins.command.MainCommand;
 import me.hsgamer.multicoins.config.MainConfig;
@@ -13,9 +12,9 @@ import me.hsgamer.multicoins.expansion.CoinsExpansion;
 import me.hsgamer.multicoins.listener.PlayerListener;
 import me.hsgamer.multicoins.manager.CoinManager;
 import me.hsgamer.multicoins.object.CoinFormatter;
-import me.hsgamer.topper.spigot.builder.NumberStorageBuilder;
 import me.hsgamer.topper.spigot.config.DefaultConverterRegistry;
 import me.hsgamer.topper.spigot.config.converter.StringMapConverter;
+import me.hsgamer.topper.spigot.number.NumberStorageBuilder;
 
 import java.io.File;
 import java.util.*;
@@ -25,8 +24,8 @@ public final class MultiCoins extends BasePlugin {
         DefaultConverterRegistry.register();
 
         //noinspection UnstableApiUsage
-        DefaultConverterManager.registerConverter(new TypeToken<Map<String, CoinFormatter>>() {
-        }.getType(), new StringMapConverter<CoinFormatter>() {
+        DefaultConverterRegistry.register(new TypeToken<Map<String, CoinFormatter>>() {
+        }, new StringMapConverter<CoinFormatter>() {
             @Override
             protected CoinFormatter toValue(Object o) {
                 if (o instanceof Map) {
@@ -48,8 +47,8 @@ public final class MultiCoins extends BasePlugin {
             }
         });
         //noinspection UnstableApiUsage
-        DefaultConverterManager.registerConverter(new TypeToken<Map<String, Double>>() {
-        }.getType(), new StringMapConverter<Double>() {
+        DefaultConverterRegistry.register(new TypeToken<Map<String, Double>>() {
+        }, new StringMapConverter<Double>() {
             @Override
             protected Double toValue(Object o) {
                 try {

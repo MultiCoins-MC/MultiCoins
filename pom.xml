@@ -14,6 +14,7 @@
     <properties>
         <java.version>1.8</java.version>
         <core.version>4.2.19</core.version>
+        <topper.version>2.4.0</topper.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -94,9 +95,19 @@
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>topper-spigot</artifactId>
-            <version>2.3.0</version>
+            <version>${topper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>topper-spigot-number</artifactId>
+            <version>${topper.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>me.hsgamer</groupId>
+            <artifactId>hscore-bukkit-baseplugin</artifactId>
+            <version>${core.version}</version>
+        </dependency>
         <dependency>
             <groupId>me.hsgamer</groupId>
             <artifactId>hscore-bukkit-command-sub</artifactId>

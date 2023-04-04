@@ -2,7 +2,7 @@ package me.hsgamer.multicoins.object;
 
 import me.hsgamer.hscore.bukkit.utils.ColorUtils;
 import me.hsgamer.hscore.common.Validate;
-import me.hsgamer.topper.spigot.formatter.NumberFormatter;
+import me.hsgamer.topper.spigot.number.NumberFormatter;
 
 import java.util.Map;
 import java.util.Objects;
