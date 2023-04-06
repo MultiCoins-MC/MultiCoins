@@ -38,6 +38,15 @@ public class CoinsExpansion extends PlaceholderExpansion {
     }
 
     @Override
+    public boolean register() {
+        boolean result = super.register();
+        if (result) {
+            instance.addDisableFunction(this::unregister);
+        }
+        return result;
+    }
+
+    @Override
     public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
         String[] split = params.split(";");
         String name = split[0].trim();

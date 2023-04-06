@@ -81,10 +81,8 @@ public final class MultiCoins extends BasePlugin {
         registerListener(new PlayerListener(this));
         registerCommand(new MainCommand(this));
 
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            CoinsExpansion expansion = new CoinsExpansion(this);
-            expansion.register();
-            addDisableFunction(expansion::unregister);
+        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new CoinsExpansion(this).register();
         }
     }
 
