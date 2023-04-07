@@ -2,11 +2,13 @@ package me.hsgamer.multicoins.command.sub;
 
 import me.hsgamer.multicoins.MultiCoins;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.HumanEntity;
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class CommandUtils {
@@ -23,8 +25,9 @@ public final class CommandUtils {
                     .collect(Collectors.toList());
         } else if (args.length == 2) {
             String name = args[1].trim();
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(HumanEntity::getName)
+            return Arrays.stream(Bukkit.getOfflinePlayers())
+                    .map(OfflinePlayer::getName)
+                    .filter(Objects::nonNull)
                     .filter(playerName -> name.isEmpty() || playerName.startsWith(name))
                     .collect(Collectors.toList());
         }
