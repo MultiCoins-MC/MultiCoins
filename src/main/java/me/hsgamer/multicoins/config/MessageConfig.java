@@ -5,7 +5,7 @@ import me.hsgamer.hscore.config.annotation.ConfigPath;
 public interface MessageConfig {
     @ConfigPath("prefix")
     default String getPrefix() {
-        return "&7[&dMulticoins&7] &r";
+        return "&7[&dMultiCoins&7] &r";
     }
 
     @ConfigPath("player-only")
