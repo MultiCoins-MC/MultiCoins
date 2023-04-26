@@ -8,7 +8,6 @@ import me.hsgamer.hscore.config.proxy.ConfigGenerator;
 import me.hsgamer.multicoins.command.MainCommand;
 import me.hsgamer.multicoins.config.MainConfig;
 import me.hsgamer.multicoins.config.MessageConfig;
-import me.hsgamer.multicoins.expansion.CoinsExpansion;
 import me.hsgamer.multicoins.listener.PlayerListener;
 import me.hsgamer.multicoins.manager.CoinManager;
 import me.hsgamer.multicoins.object.CoinFormatter;
@@ -80,10 +79,6 @@ public final class MultiCoins extends BasePlugin {
         coinManager.setup();
         registerListener(new PlayerListener(this));
         registerCommand(new MainCommand(this));
-
-        if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            new CoinsExpansion(this).register();
-        }
     }
 
     @Override
