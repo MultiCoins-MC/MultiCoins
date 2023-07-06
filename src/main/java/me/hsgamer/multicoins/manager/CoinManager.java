@@ -1,7 +1,6 @@
 package me.hsgamer.multicoins.manager;
 
 import me.hsgamer.multicoins.MultiCoins;
-import me.hsgamer.multicoins.object.CoinFormatter;
 import me.hsgamer.multicoins.object.CoinHolder;
 import me.hsgamer.topper.core.holder.DataHolder;
 import me.hsgamer.topper.core.storage.DataStorage;
@@ -25,7 +24,6 @@ public class CoinManager {
             holder.register();
             holders.put(name, holder);
         });
-        CoinFormatter.setNullDisplayValue(() -> "0");
     }
 
     public Function<DataHolder<Double>, DataStorage<Double>> getStorageSupplier() {

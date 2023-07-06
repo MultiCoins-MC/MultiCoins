@@ -31,22 +31,22 @@ public interface MainConfig {
         return map;
     }
 
-    @ConfigPath("storage.type")
+    @ConfigPath({"storage", "type"})
     default String getStorageType() {
         return "yaml";
     }
 
-    @ConfigPath("storage.urgent-load")
+    @ConfigPath({"storage", "urgent-load"})
     default boolean isStorageUrgentLoad() {
         return true;
     }
 
-    @ConfigPath("storage.save.delay")
+    @ConfigPath({"storage", "save", "delay"})
     default int getStorageSaveDelay() {
         return 20;
     }
 
-    @ConfigPath("storage.save.entry-per-tick")
+    @ConfigPath({"storage", "save", "entry-per-tick"})
     default int getStorageSaveEntryPerTick() {
         return 1;
     }

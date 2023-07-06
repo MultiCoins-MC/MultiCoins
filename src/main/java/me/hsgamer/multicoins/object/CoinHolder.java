@@ -20,7 +20,7 @@ public final class CoinHolder extends DataWithAgentHolder<Double> {
         storageAgent.setMaxEntryPerCall(instance.getMainConfig().getStorageSaveEntryPerTick());
         storageAgent.setRunTaskFunction(runnable -> {
             int saveDelay = instance.getMainConfig().getStorageSaveDelay();
-            return Scheduler.CURRENT.runTaskTimer(instance, runnable, saveDelay, saveDelay, true)::cancel;
+            return Scheduler.plugin(instance).async().runTaskTimer(runnable, saveDelay, saveDelay)::cancel;
         });
         storageAgent.setLoadOnCreate(true);
         storageAgent.setUrgentLoad(instance.getMainConfig().isStorageUrgentLoad());

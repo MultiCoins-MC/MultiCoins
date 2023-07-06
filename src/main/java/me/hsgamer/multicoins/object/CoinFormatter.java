@@ -17,6 +17,7 @@ public class CoinFormatter extends NumberFormatter {
 
     public CoinFormatter(Map<String, Object> map) {
         super(map);
+        setNullDisplayValue("0");
         Optional.ofNullable(map.get("currency-singular")).ifPresent(s -> currencySingular = String.valueOf(s));
         Optional.ofNullable(map.get("currency-plural")).ifPresent(s -> currencyPlural = String.valueOf(s));
         Optional.ofNullable(map.get("negative-allowed")).ifPresent(s -> negativeAllowed = Boolean.parseBoolean(String.valueOf(s)));
