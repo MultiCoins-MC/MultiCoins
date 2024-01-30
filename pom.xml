@@ -14,7 +14,7 @@
     <properties>
         <java.version>1.8</java.version>
         <core.version>4.3.26</core.version>
-        <topper.version>2.5.1</topper.version>
+        <topper.version>2.5.2</topper.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
